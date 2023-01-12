@@ -2,6 +2,14 @@
 
 using namespace std;
 
+// skips over all whitespace characters before next lexeme
+void skipWS(istream &is)
+{
+  char ch;
+  is >> ch;  // a bit of trick here ... reads next non-WS char
+  if (is)
+    is.putback(ch);
+}
 
 static int **DFA=nullptr;
 
@@ -44,11 +52,9 @@ Token::read(istream &is)
   _value=""; // start token val as empty
   char ch; // character to consider adding to Token. 
   
-  // skip whitespace (tricky, tricky!)
-  is >> ch;
+  skipWS(is);
   if (!is)
-    return is; 
-  is.putback(ch);
+    return is;
   
   int curr=0;  // current state - initialized as start state
   int prev=-1; // previous state; when starting, we don't have one. 
